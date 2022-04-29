@@ -1,0 +1,95 @@
+Client - Internet - Server .. request & response
+API - Web API - Detail
+Sender of packet (IP) - IP to IP - The Inernet - Recipient of packet
+
+IP address -  PS C:\Users\dkrna> ipconfig /all
+- IPv4 Address. . . . . . . . . . . : 192.168.50.32(Preferred)
+
+Virtual environment (troubleshooting Windows)
+1. Prepare your environment (VS Code on Windows)
+
+Python 3
+a.all       python -m venv .venv
+b.unix      source .venv/bin/activate
+c.windows   .\.venv\Scripts\activate
+
+2. In Select Interpreter > choose the newly created environment (.venv)
+
+(.venv) PS C:\Users\dkrna\desktop\Pyladies\fastapi> cd .venv
+(.venv) PS C:\Users\dkrna\desktop\Pyladies\fastapi\.venv> dir
+
+Directory: C:\Users\dkrna\desktop\Pyladies\fastapi\.venv
+
+Mode                 LastWriteTime         Length Name
+----                 ------------ - ------ ----
+d-----        28/04/2022     18:27                Include
+d-----        28/04/2022     18:27                Lib
+d-----        28/04/2022     18:27                Scripts
+-a----        28/04/2022     18:27            119 pyvenv.cfg
+
+(.venv) PS C:\Users\dkrna\desktop\Pyladies\fastapi\.venv> cd scripts
+(.venv) PS C:\Users\dkrna\desktop\Pyladies\fastapi\.venv\scripts> dir
+
+Directory: C:\Users\dkrna\desktop\Pyladies\fastapi\.venv\scripts
+
+Mode                 LastWriteTime         Length Name
+----                 ------------ - ------ ----
+-a----        28 / 04 / 2022     18:27           2087 activate
+-a----        28/04/2022     18:27           1016 activate.bat
+-a----        28/04/2022     18:27          20655 Activate.ps1
+-a----        28/04/2022     18:27            393 deactivate.bat
+-a----        28/04/2022     18:27         106375 pip.exe
+-a----        28/04/2022     18:27         106375 pip3.10.exe
+-a----        28/04/2022     18:27         106375 pip3.exe
+-a----        28/04/2022     18:27         263120 python.exe
+-a----        28/04/2022     18:27         251856 pythonw.exe
+
+
+(.venv) PS C:\Users\dkrna\desktop\Pyladies\fastapi\.venv\scripts>
+
+Python 3 Web API with FastAPI
+- pip install fastapi
+- pip install "uvicorn[standard]" (on Windows pip install uvicorn) - this is installastion of server
+
+(.venv) PS C:\Users\dkrna\desktop\Pyladies\fastapi\.venv\scripts> cd ..
+(.venv) PS C:\Users\dkrna\desktop\Pyladies\fastapi\.venv> python
+>>> import fastapi
+>>> import uvicorn
+
+HTTP Methods:
+C - Create - Post
+
+
+Excercise:
+1. Write one GET endpoint:
+a. Run the server
+b. Test your endpoint
+
+-- Create file main.py
+(.venv) PS C:\Users\dkrna\desktop\Pyladies\fastapi> cat .\main.py  
+-- Read the file
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+-- Copy that to a file main.py.
+-- We can write only def root() in python
+-- When writing @app.get("/hello") we create path after IP address
+
+(.venv) PS C:\Users\dkrna\desktop\Pyladies\fastapi> uvicorn main:app --reload
+
+-- Run the fastapi
+
+http://127.0.0.1:8000
+http://127.0.0.1:8000/docs -- documentation of my api
+
+(.venv) PS C:\Users\dkrna\desktop\Pyladies\fastapi> uvicorn main:app --host 192.168.50.32 --reload
+
+-- Serving API
+
