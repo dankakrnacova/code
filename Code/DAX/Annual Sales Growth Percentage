@@ -1,0 +1,2 @@
+(SUM('Sales'[sales_amount]) - CALCULATE(SUM('Salesג'sales_amount]), SAMEPERIODLASTYEAR('Date'[DateID]) ) )
+    / CALCULATE(SUM('Sales'[sales_amount]), SAMEPERIODLASTYEAR('Date'[DateID]))

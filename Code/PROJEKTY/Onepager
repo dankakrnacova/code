@@ -1,0 +1,42 @@
+let
+    Source = Excel.Workbook(File.Contents("C:\Users\dkrnacova\OneDrive - DXC Production\Documents\Internal\Onepager\Onepager_November_cycle_v1.1_zmenene_stlpce.xlsb"), null, true),
+    #"Final Database1" = Source{[Name="Final Database"]}[Data],
+    RemovedTop2Rows = Table.Skip(#"Final Database1",2),
+    PromotedHeaders = Table.PromoteHeaders(RemovedTop2Rows, [PromoteAllScalars=true]),
+    FilteredSummitBusiness = Table.SelectRows(PromotedHeaders, each ([Summit Business type] = "Add-On" or [Summit Business type] = "Renewals/Extensions" or [Summit Business type] = "Secured")),
+    UnpivotedFiscalPeriodMetric = Table.UnpivotOtherColumns(FilteredSummitBusiness, {"Summit Business type", " MHL07 map", " PostObj Service Line", " Business Type Code", " Project", "Project name "}, "Attribute", "Value"),
+    FilteredFiscalPeriod = Table.SelectRows(UnpivotedFiscalPeriodMetric, each not Text.Contains([Attribute], "Q") and Text.Contains([Attribute], "-")),
+    SplitFiscalPeriodMetric = Table.SplitColumn(FilteredFiscalPeriod, "Attribute", Splitter.SplitTextByEachDelimiter({" "}, QuoteStyle.Csv, false), {"Fiscal_Period", "Metric"}),
+    SplitResell_Num = Table.SplitColumn(SplitFiscalPeriodMetric, "Metric", Splitter.SplitTextByEachDelimiter({"_"}, QuoteStyle.Csv, true), {"Metric", "Metric.2"}),
+    RemovedColumns = Table.RemoveColumns(SplitResell_Num,{"Metric.2"}),
+    AddedYearMonthKey = Table.AddColumn(RemovedColumns, "YearMonthKey", each Text.Combine(List.RemoveNulls(List.Transform(Text.ToList([Fiscal_Period]),each if Value.Is(Value.FromText(_), type number) then _ else null))), Int64.Type),
+    AddedFiscalYear = Table.AddColumn(AddedYearMonthKey, "Fiscal_Year", each "FY" & Text.Start(Text.From([#"YearMonthKey"], "en-150"), 4), type text),
+    AddedFiscalMonth = Table.AddColumn(AddedFiscalYear, "Month", each Text.End(Text.From([YearMonthKey], "en-150"), 2), Int64.Type),
+    AddedFiscalMonthName = Table.AddColumn(AddedFiscalMonth, "Fiscal_Month", 
+                                                                each if [Month] = "01" then "01 Apr"
+                                                                else if [Month] = "02" then "02 May"
+                                                                else if [Month] = "03" then "03 Jun"
+                                                                else if [Month] = "04" then "04 Jul"
+                                                                else if [Month] = "05" then "05 Aug"
+                                                                else if [Month] = "06" then "06 Sep"
+                                                                else if [Month] = "07" then "07 Oct"
+                                                                else if [Month] = "08" then "08 Nov"
+                                                                else if [Month] = "09" then "09 Dec"
+                                                                else if [Month] = "10" then "10 Jan"
+                                                                else if [Month] = "11" then "11 Feb"
+                                                                else "12 Mar"
+                                                            ),
+    AddedFiscalQuarter = Table.AddColumn(AddedFiscalMonthName, "Fiscal_Quarter", 
+                                                                each if [Month] = "01" or [Month] = "02" or [Month] = "03" 
+                                                                    then "Q1" 
+                                                                else if  [Month] = "04" or [Month] = "05" or [Month] = "06" 
+                                                                    then "Q2" 
+                                                                else if [Month] = "07" or [Month] = "08" or [Month] = "09" 
+                                                                    then "Q3" 
+                                                                else "Q4"
+                                                            ),
+    ChangedTypeValue = Table.TransformColumnTypes(AddedFiscalQuarter,{{"Value", type number}}),
+    ValueMultipliedMillion = Table.ReplaceValue(ChangedTypeValue, each [Value], each [Value] * 1000000, Replacer.ReplaceValue, {"Value"}),
+    ChangedTypeValue1 = Table.TransformColumnTypes(ValueMultipliedMillion,{{"Value", type number}})
+in
+    ChangedTypeValue1

@@ -1,0 +1,11 @@
+Cost per Person (ALL) = IF(
+                            ISCROSSFILTERED(CLC[L5_Name]), 
+                                CALCULATE(
+                                    SUM('Actuals Pre AMS'[Fixed Budget USD]), 
+                                    ALL(DateTable[Dates]), 
+                                    'Actuals Pre AMS'[Cost Stack Mgmt L08 Name] = "Payroll")
+                                / COUNT(Employees[Employee ID]), 
+                                BLANK()
+                            )
+
+// nefunguje

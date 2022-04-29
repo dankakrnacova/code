@@ -1,0 +1,21 @@
+Avg Last N Weeks Sales = 
+var SelectedWeekOptionsValue = SELECTEDVALUE(WeeksOptions[Weeks#])
+var CurrentYearWeek = SELECTEDVALUE('Date'[YearWeek])
+ 
+var AvgLastNWeeksSales = 
+AVERAGEX(
+    ADDCOLUMNS(
+        TOPN(
+            SelectedWeekOptionsValue, 
+            CALCULATETABLE(
+                VALUES('Date'[YearWeek]), 
+                'Date'[YearWeek]<CurrentYearWeek),
+            'Date'[YearWeek], 
+            DESC
+        ),
+        "tempSales",
+        [Sales]
+    ),
+    [tempSales]
+)
+return  AvgLastNWeeksSales

@@ -1,0 +1,25 @@
+// calculates for all months, if filtered selected month & filtered not null - it shows all months = not null ale nie selected
+
+FTE Difference = (SUM(PPMC_Assign_All[FTE]) - CALCULATE(SUM(PPMC_Assign_All[FTE]), PREVIOUSMONTH(DateTable[Date])))
+FTE_PreviousMonth = CALCULATE(SUM(PPMC_Assign_All[FTE]), ALL(PPMC_Assign_All[Position_ID]), PREVIOUSMONTH(DateTable[Date]))
+FTE Current Month = CALCULATE(SUM(PPMC_Assign_All[FTE]), MONTH(DateTable[Date]) = MONTH(TODAY()), YEAR(DateTable[Date]) = YEAR(TODAY()))
+
+// max available week and use relationship
+
+FTE Difference = CALCULATE(
+                    SUM(PPMC_Assign_All[FTE]) - 
+                        CALCULATE(
+                                SUM(PPMC_Assign_All[FTE]), PREVIOUSMONTH(DateTable[Date])
+                                ), 
+                    MONTH(DateTable[Date]) = MONTH(TODAY()) || MONTH(PREVIOUSMONTH(DateTable[Date])) || MONTH(NEXTMONTH(DateTable[Date]))
+)
+
+Current Month FTE = CALCULATE(SUM(PPMC_Assign_All[FTE]), 
+                        USERELATIONSHIP(DateTable[Date], PPMC_Assign_All[Report_Date]),
+                        FILTER(PPMC_Assign_All, PPMC_Assign_All[Report_Date] = MAX(PPMC_Assign_All[Report_Date])))
+
+// zle
+
+MONTH(PPMC_Assign_All[Forecast_Date]) = PREVIOUSMONTH(DateTable[Date]),
+
+FILTER(PPMC_Assign_All, PPMC_Assign_All[WeekOfYearKey] = MAX(PPMC_Assign_All[WeekOfYearKey])))

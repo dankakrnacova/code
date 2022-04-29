@@ -1,0 +1,50 @@
+Sales sameperiod =
+VAR first_date =
+    FIRSTDATE ( DATEADD ( ‘Calendar'[Date], -12, MONTH ) )
+VAR last_date =
+    LASTDATE ( DATEADD ( Sales[Date], -12, MONTH ) )
+RETURN
+    IF (
+        ISBLANK ( first_date ) || ISBLANK ( last_date ),
+        BLANK (),
+        CALCULATE (
+            SUM ( Sales[sales] ),
+            DATESBETWEEN ( ‘Calendar'[Date], first_date, last_date )
+        )
+    )
+
+// 
+
+CompletedCumulative =
+
+VAR MaxDate = MAX ( 'Date'[Date] ) -- Saves the last visible date
+
+RETURN
+
+CALCULATE (
+        Servers[ServersNotBlank],
+        Servers[CompletedFlag] = "Completed",
+        USERELATIONSHIP(Servers[Estimated Completion Date], 'Date'[Date]), -- Use different date relationship
+'Date'[Date] <= MaxDate, -- Where date is before the last visible date
+ALL ('Date'[Date]) -- Removes any other filters from Date
+)
+
+// 
+
+-- toto nefungovalo
+
+YTD $ = TOTALYTD([Fixed Budget $], DateTable[Dates], DATESBETWEEN(Horizon[Date], MIN(Horizon[Date]), MAX(Horizon[Date])))
+
+// 
+
+Cumulative =
+
+VAR MaxDate = MAX ( Horizon[Date] ) -- Saves the last visible date
+
+RETURN
+
+CALCULATE (
+        [Fixed Budget $],
+	DateTable[Dates]<= MaxDate, -- Where date is before the last visible date
+	ALL (DateTable[Dates]) -- Removes any other filters from Date
+)

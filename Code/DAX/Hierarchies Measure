@@ -1,0 +1,12 @@
+Segmentation = 
+SWITCH (
+    TRUE (),
+    ISINSCOPE ( 'Fact'[Product] ) || ISINSCOPE ( 'Fact'[Course] ), [Pop x Grade],
+    ISINSCOPE ( 'Fact'[Probability] ),
+        SUMX (
+            VALUES ( 'Fact'[Course] ),
+            [Pop x Grade]
+        ),
+    ISINSCOPE ( 'Fact'[Type] ), "Type", // change to any calculation at your own will
+    "Code" // change to any calculation at your own will
+)

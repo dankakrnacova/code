@@ -1,0 +1,7 @@
+CALCULATE ( SUM( BalanceSheet [BalanceAmount] ), LASTDATE( 'Date'[Date] ) )
+
+-- to get the ending balances in the balance sheet reports
+
+-- equivalent for M code
+
+Date.EndOfMonth(#date([Year],[Month],1))

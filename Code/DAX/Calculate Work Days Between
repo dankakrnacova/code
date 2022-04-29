@@ -1,0 +1,12 @@
+// To count the working days between the arrival date (say of a request) and the approval date of that request.
+
+Work Days SUMX=
+     SUMX(Data,
+          CALCULATE(
+             CALCULATE(
+                 SUM('Calendar'[Is Weekday]),
+                 FILTER(ALL('Calendar'),'Calendar'[Date] >= MAX(Data[Date Received])),
+                 FILTER(ALL('Calendar'),'Calendar'[Date] <= MAX(Data[Date Approved]))
+             )
+          )
+     )

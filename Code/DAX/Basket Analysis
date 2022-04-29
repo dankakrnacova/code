@@ -1,0 +1,69 @@
+Basket analysis = FILTER(
+                    CROSSJOIN(VALUES('groceries'[Item]), SELECTCOLUMNS(VALUES('groceries'[Item]),"Item2", [Item])),
+                    [Item]>[Item2])
+
+// There are two parts to the formula: FILTER and CROSSJOIN. 
+// CROSSJOIN generates the table by creating one row for each couple of items. 
+// Specifically, it creates one row for whole milk plus citrus, one row for whole milk plus coffee, one row for citrus plus coffee, etc.
+// FILTER removes the duplicate rows. 
+// We now have a table with all possible combinations of products.
+
+Basket = [Item]&" – "&[Item2]
+
+// The following step is adding a calculated column with the concatenation of the two items. 
+
+Support basket = 
+// The Support of the basket tells us the percentage of the transactions containing the two specific items. 
+
+var item1 = [Item]
+var item2 = [Item2]
+
+var transactionsWithItem1 = SELECTCOLUMNS(FILTER('groceries','groceries'[Item]=item1),"transactionID",[Transaction ID])
+// transactionsWithItem1 returns a table of all transactions including the first product. 
+
+var transactionsWithItem2 = SELECTCOLUMNS(FILTER('groceries','groceries'[Item]=item2),"transactionID",[Transaction ID])
+// transactionsWithItem2 does the same with the second product. 
+
+var transactionsWithBothItems = INTERSECT(transactionsWithItem1,transactionsWithItem2)
+// transactionsWithBothItems returns a table of the transactions including both products. 
+
+RETURN COUNTROWS(transactionsWithBothItems) / DISTINCTCOUNT(groceries[Transaction ID])
+// COUNTROWS counts the number of transactions with both products and DISTINCTCOUNT counts the total number of transactions.
+
+
+Confidence Item 1 -> Basket = 
+
+var item1 = [Item]
+var numberOfTransactions = DISTINCTCOUNT(groceries[Transaction ID])
+
+var supportItem1 = COUNTROWS(FILTER('groceries','groceries'[Item]=item1))/ numberOfTransactions
+
+RETURN [Support basket]/supportItem1
+
+// Confidence is equal to the percentage of transactions with both products (called Support of the basket) 
+// divided by the percentage of transactions with only one product (called Support of the product).
+
+Lift = 
+
+var item1 = [Item]
+var item2 = [Item2]
+
+var numberOfTransactions = DISTINCTCOUNT(groceries[Transaction ID])
+
+var supportItem1 = COUNTROWS(FILTER('groceries','groceries'[Item]=item1))/numberOfTransactions
+
+var supportItem2 = COUNTROWS(FILTER('groceries','groceries'[Item]=item2))/numberOfTransactions
+
+RETURN [Support basket]/(supportItem1*supportItem2) 
+
+// Let's take the example of unrelated products: for those products, the percentage of times the products are bought together 
+// (support of basket) should be similar to the percentage of times product 1 is bought, multiplied by the percentage of times 
+// product 2 is bought.
+// In this case, the numerator and denominator in the formula have similar values and therefore the value of Lift is close to one. 
+// A value of Lift close to one indicates no relationships.
+// When Lift is higher than one, the two products are bought together more times than would happen by chance. 
+// A lift of 4, for example, indicates a strong relationship: the products are bought together four times more often than would happen 
+// by chance.
+
+
+VISUAL = Search for Network and add the Advanced Network Visual (Light Edition).

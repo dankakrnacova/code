@@ -1,0 +1,6 @@
+You have a clustered bar chart that contains a measure named Salary as the value and a field named Employee as the axis. Salary is present in the data as numerical amount representing US dollars.
+You need to create a reference line to show which employees are above the median salary.
+Solution: You create an average line by using the Salary measure.
+No, Instead create a Median line in Analytics pane (Visualizations - lupa)
+
+

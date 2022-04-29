@@ -1,0 +1,1 @@
+= Table.AddColumn(#"Extracted Text Between Delimiters", "Candidate_Name", each if [Name] <> null then Text.Combine(List.Reverse(Text.Split([Name]," ")), ",") else null)

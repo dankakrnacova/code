@@ -1,0 +1,24 @@
+Summ Tot = 
+
+VAR vTable =
+    SUMMARIZE(
+        Data,
+        Data[Region],
+        Data[Qty]
+    )
+    
+VAR Result =
+IF(
+    HASONEVALUE( Data[Region] ),
+    MAXX(
+        vTable,
+        Data[Qty]
+    ),
+    SUMX(
+        vTable,
+        Data[Qty]
+    )
+)
+
+RETURN
+Result 

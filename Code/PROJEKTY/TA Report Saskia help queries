@@ -1,0 +1,45 @@
+GHP 
+kolko ma graduentov Hiring manager - uchovava aj historicke data za cely FY
+zmena statusu - aky je status
+doplnit meno, udaje
+
+GHP
+Removed from VTP - DeploymentEffectiveDate - monthly
+
+
+v TA reporte - Offer Accepted - Candidate Name
+GHP - Name - prehodene - vsade kde nie je ciarka, je najprv meno a priezvisko, 
+inak je najprv priezvisko a potom meno
+
+na zaklade sparovanych mien priradime Title = EID
+
+
+DeploymentEffectiveDate v GHP
+- 
+
+TA Report - Start Date - column V
+= 1-4 + 2 month v ITO
+= viac ako 4 o 3 mesiace v ITO
+
+z GHP vsetci status column H - non GHP odfiltrovat a report Exit from Company 
+
+ETL
+    1. V GHP edit meno Surname,Name
+    2. V Grad Tracker - Candidate Name - deleted middle name - it is not considered in Workday data 
+    
+    
+    
+    
+    
+    #"Split Column by Delimiter" = Table.SplitColumn(#"Filtered Rows1", "Name", Splitter.SplitTextByEachDelimiter({","}, QuoteStyle.Csv, false), {"Name.1", "Name.2"}),
+    #"Split Column by Delimiter1" = Table.SplitColumn(#"Split Column by Delimiter", "Name.1", Splitter.SplitTextByDelimiter(" ", QuoteStyle.Csv), {"Name.1.1", "Name.1.2"}),
+    #"Merged Columns" = Table.CombineColumns(#"Split Column by Delimiter1",{"Name.1.2", "Name.1.1"}, Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"Merged"),
+    #"Merged Columns1" = Table.CombineColumns(#"Merged Columns",{"Merged", "Name.2"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"EmployeeName"),
+    #"Trimmed Text" = Table.TransformColumns(#"Merged Columns1",{{"EmployeeName", Text.Trim, type text}}),
+    #"Capitalized Each Word" = Table.TransformColumns(#"Trimmed Text",{{"EmployeeName", Text.Proper, type text}}),
+    #"Renamed Columns" = Table.RenameColumns(#"Capitalized Each Word",{{"Title", "EID"}}),
+    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"EID", Int64.Type}, {"Removed from VTP", type logical}, {"GH Status", type text}, {"Status Comment", type text}, {"HireDate", type date}, {"Planned Onboarding Completion Date", type date}, {"Planned Deployment Date", type date}, {"DeploymentEffectiveDate", type date}, {"TypeOfDeployment", type text}, {"PotentialCPP", type text}})
+in
+    #"Changed Type1"
+
+

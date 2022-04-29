@@ -1,0 +1,2 @@
+= Table.AddColumn(#"Removed Columns", "YearMonthKey", each Text.Combine(List.RemoveNulls(List.Transform(Text.ToList([Fiscal_Period]),each if Value.Is(Value.FromText(_), type number) then _ else null))), Int64.Type)
+= Table.AddColumn(RemovedColumns2, "L4", each Text.Combine(List.RemoveNulls(List.Transform(Text.ToList([HM_L4_Mngr_Name]),each if Value.Is(Value.FromText(_), type number) then _ else null ))), Int64.Type)

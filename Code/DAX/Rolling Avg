@@ -1,0 +1,11 @@
+FullDate = DATE ( 2016, 'Session'[Month of the Year], 1 )
+Moving_Average_3_Months = 
+CALCULATE (
+    AVERAGEX ( 'Session', 'Session'[Sessions] ),
+    DATESINPERIOD (
+        'Session'[FullDate],
+        LASTDATE ( 'Session'[FullDate] ),
+        -3,
+        MONTH
+    )
+)

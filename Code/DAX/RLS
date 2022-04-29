@@ -1,0 +1,3 @@
+Roles = Admins
+Tables = ... // Column names - Admin1, Admin2, Admin2, Admin4 a email v kazdom riadku
+[Admin1] = userprincipalname() || [Admin2] = userprincipalname() || [Admin3] = userprincipalname() || [Admin4] = userprincipalname()

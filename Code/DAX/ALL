@@ -1,0 +1,8 @@
+Cost per Person (ALL) = CALCULATE(
+                            SUM('Actuals Pre AMS'[Fixed Budget USD]), 
+                            ALL(DateTable[Dates]), 
+                            'Actuals Pre AMS'[Cost Stack Mgmt L08 Name] = "Payroll"
+                            )  / 
+                            COUNT(Employees[Employee ID])
+                            
+Filter DateTable[Dates] je aplikovany na iny graf

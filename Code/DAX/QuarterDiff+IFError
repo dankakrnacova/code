@@ -1,0 +1,16 @@
+NET_SALES QoQ% =
+IF(
+ISFILTERED('Calendar'[Date]),
+ERROR("Time intelligence quick measures can only be grouped or filtered by the Power BI-provided date hierarchy or primary date column."),
+VAR __PREV_QUARTER =
+CALCULATE(
+SUM('research ra_qtr_template'[NET_SALES]),
+DATEADD('Calendar'[Date].[Date], -1, QUARTER)
+)
+
+RETURN -
+DIVIDE(
+SUM('research ra_qtr_template'[NET_SALES]) - __PREV_QUARTER,
+__PREV_QUARTER
+)
+)

@@ -1,0 +1,9 @@
+// Error: The expression refers to multiple columns. Multiple columns cannot be converted to a scalar value.
+Current Month FTE = 
+            SUMMARIZE(
+                PPMC_Assign_All, 
+                    PPMC_Assign_All[Position_ID], 
+                    PPMC_Assign_All[EID],
+                    PPMC_Assign_All[Forecast_Date],
+                        "Sum FTE", SUMX(PPMC_Assign_All, PPMC_Assign_All[FTE])
+                    )s

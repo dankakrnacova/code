@@ -1,0 +1,12 @@
+Sales QoQ% = 
+IF(
+    ISFILTERED('Financials'[Date]),
+    ERROR("Uh, Oh"),
+    Var PrevQuarter = 
+        CALCULATE(
+            SUM('Financials'[Sales]),
+                DATEADD('Financials'[Date].[Date], -1, QUARTER)
+        )
+    Return
+        DIVIDE(SUM('Financials'[Sales] - PrevQuarter, PrevQuarter))
+)

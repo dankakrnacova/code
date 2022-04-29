@@ -1,0 +1,2 @@
+FilterMeasure = ABS(SUM(TableName[FTE])) + ABS(SUM(TableName[Plan_FTE]))
+// FilterMeasure > 0

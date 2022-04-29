@@ -1,0 +1,174 @@
+Revenue ES
+...
+Sum april/ zakaznici
+=C73+P73+AC73+AP73+BC73+BP73+CC73+CP73+DC73+DP73
+..
+C73 = april, OMT SR
+=C72+C16  (New Revenue ES + Secured Revenue ES)
+
+.
+C72 = C71+C64 (New Revenue Apps + New Revenue ITO)
+New Revenue ES
+ITO ... Sum of New Revenue ICSEP, IDATD, ISECD, INETD, IVPCD, IWRKD
+Apps ... Sum of New Revenue ACMTD, AMGTD, AIMAD, BANK, AEASD
+
+....
+ACMTD... = Sum of ... New Logo Rev, Installed Base Rev, Renewal Rev
+---
+Source:
+ 
+.
+C16 = C8+C15  (Secured Revenue Apps + Secured Revenue ITO)
+Secured Revenue ES 
+C8 ITO ... Sum of Secured Revenue ICSEP, IDATD, ISECD, INETD miss, IVPCD miss, IWRKD
+= Family Name 
+= Cloud and Security Platform, Cloud and Platform Services, Security, .. , .., Workplace and Mobility 
+C15 Apps ... Sum of Secured Revenue ACMTD miss, AMGTD, AIMAD, BANK miss, AEASD
+= Family Name
+= .., Application Services, Analytics, .., Enterprise and Cloud Apps
+---
+Dalej sa nevetvi
+Source: Database
+=SUMIF(Database!$BU$2:$BU$13293,$C$1&$B9&'Summary Details'!C$2,Database!$Z$2:$Z$13293)/1000
+SumIf
+ Range Database - BU2 - BU13293, - napr. MF SRPUB+HLTHSecured Revenue AEASDJun
+ Criteria - Customer, Secured Revenue & Market Offer (kod - F in Database), Month
+ Sum Range - Database Z2 - Z13293 
+cele Sum If / 1000
+
+Database
+.BU RANGE
+Free slot :) BT&BS = string
+BT..G1K vysledny nazov asi accountu vznika MATCHom 
+=INDEX('New Projects Browse'!$J$2:$J$670,MATCH(Database!C5,'New Projects Browse'!$A$2:$A$670,0))
+...New Projects Browse - J2-J670 - Project ID // in DB v.projects
+...Database C9 - Project (SK1-xxxxx) // in DB v.database
+BS..Revenue SUM condition
+...BM & BN & BJ = Industry + "Secured Revenue" + Service Line  + Month
+.Z SUM
+Plan Revenue $
+..H20*vlookup(A20, Parameters C4I124, 5, False) 
+= Plan Revenue EUR * Fiscal year/period - Ex rate
+
+///
+Revenue in Mar
+///
+P&L Summary
+///
+FCST per Industry FY22 = Soc. poistovna TOTAL = Revenue in Mar = PP =+QH3+QZ3 = *+* Soc. poist Apps + Soc. poist ITO 
+- result - 8 - Apps 8 + ito 0
+///
+Summary Details 
+/// 
+Socialna poistovna Marec
+---------------------------------------------------
+Apps (DN8 + DN64) + ITO (DN15 + DN71) !!! v ITO nic nie je !!!
+---------------------------------------------------
+
+---
+DN8
+---
+Secured Revenue Apps + Mar
+=DN4+DN3+DN5+DN6+DN7
+Sum of Kod + Secured 
+=SUMIF(Database!$CX$2:$CX$13293,$DC$1&$B5&'Summary Details'!DN$2,Database!$Z$2:$Z$13293)/1000
+===
+Range = "Revenue SUM condition Top Accounts"
+-napr. Soc. poistovnaSecured Revenue AEASDNov =BT240&"Secured Revenue "&BN240&(LEFT(BJ240,3)),
+ 	IF Socialna poistovna & $Secured Revenue AIMAD = Mar, 
+	SumOf Revenue $ (konverzia z eur a fiscal period in Database)
+	//v tejto tabulke je kurz 1, prepocitava sa v tabulkach nizsie
+
+---	
+DN64
+---
+New Revenue Apps + Mar
+=SUM(DN59:DN63)
+Sum of Kod + New Revenue
+New Revenue ACMTD = 
+=DN17+DN31+DN45 = Renewal Rev ACMTD + Installed Base Rev ACMTD + New Logo Rev ACMTD
+Renewal =SUMIFS('Frontlog data'!$X$2:$X$111,'Frontlog data'!$A$2:$A$111,$B17,'Frontlog data'!$B$2:$B$111,$DC$1)
+Installed Base =SUMIFS('Frontlog data'!$X$2:$X$111,'Frontlog data'!$A$2:$A$111,$B31,'Frontlog data'!$B$2:$B$111,$DC$1)
+New Logo = BLANK, nie su tam nuly
+===
+Frontlog
+///
+SumOf values in Mar, IF REVENUE(Installed based or Renewal, + "Rev" + e line (koServicd) = Industry AND Industry, Jan ?
+SumOf values in Mar, IF REVENUE(Installed based or Renewal, + "Rev" + Service line (kod) = Industry = blank ? AND Industry, Jan ?
+B17 ? MF SR /// B31 ? blank // B2 ? Industry
+
+---
+DN15
+---
+Secured Revenue ITO + Mar
+=SUM(DN9:DN14)
+Sum of Kod + Secured Revenue
+=SUMIF(Database!$CX$2:$CX$13293,$DC$1&$B9&'Summary Details'!DN$2,Database!$Z$2:$Z$13293)/1000
+===
+Database
+///
+Range = Revenue SUM condition Top Accounts
+-napr. Soc. poistovnaSecured Revenue AEASDNov =BT240&"Secured Revenue "&BN240&(LEFT(BJ240,3)),
+ 	IF Socialna poistovna & $Secured Revenue ICSEP = Mar, 
+	SumOf Revenue $ (konverzia z eur a fiscal period in Database)
+
+---
+DN71
+---
+New Revenue ITO + Mar
+=SUM(DN65:DN70)
+Sum of Kod + New Revenue
+.DN65 =DN23+DN37+DN51
+===
+Frontlog
+///
+DN23 = Renewal Rev ICSEP
+=SUMIFS('Frontlog data'!$X$2:$X$111,'Frontlog data'!$A$2:$A$111,$B23,'Frontlog data'!$B$2:$B$111,$DC$1)
+SumOf values in Mar, IF REVENUE(Installed based or Renewal, + "Rev" + Service line (kod) = Industry, AND Industry, Jan ?
+
+DN37 = Installed Base Rev ICSEP
+=SUMIFS('Frontlog data'!$X$2:$X$111,'Frontlog data'!$A$2:$A$111,$B37,'Frontlog data'!$B$2:$B$111,$DC$1)
+SumOf values in Mar, IF REVENUE(Installed based or Renewal, + "Rev" + Service line (kod) = Industry, AND Industry, Jan ?
+
+DN51 = New Logo Rev ICSEP
+BLANK namiesto nuly
+
+///
+COD Own Labour in Mar
+///
+P&L Summary
+///
+FCST per Industry FY22 = Ministry of Interior TOTAL = COD Own Labour in Mar = LJ 
+=+MB4+MT4 = *+* Ministry of Interior Apps + Ministry of Interior ITO 
+- result - 74 - Apps 2 + ito 0
+///
+---------------------------------------------------
+Apps ='Summary Details'!DA94+'Summary Details'!DA318
+ITO prazdne ='Summary Details'!DA122+'Summary Details'!DA346
+---------------------------------------------------
+DA94
+---
+=DA78+DA74+DA82+DA86+DA90
+=SUMIF(Database!$CU$2:$CU$13293,$CP$1&$B78&'Summary Details'!DA$2,Database!$AA$2:$AA$13293)/1000
++SUMIF(Database!$CU$2:$CU$13293,$CP$1&$B78&'Summary Details'!DA$2,Database!$AF$2:$AF$13293)/1000/2
++SUMIF(Database!$CU$2:$CU$13293,$CP$1&$B79&'Summary Details'!DA$2,Database!$AF$2:$AF$13293)/1000/2
++SUMIF(Database!$CU$2:$CU$13293,$CP$1&$B78&'Summary Details'!DA$2,Database!$AE$2:$AE$13293)/1000
+---
+.CU 
+= MF SR"Other" HP labor Secured COS AEASDJun 
+= Account + Mapping * + Service Line + Month
+* Mapping = "Other" HP labor Secured COS ..or.. "CCOW" 3rd PTY Ser Secured COS ..or.. 3rd PTY Product Secured COS 
+.CP1
+= account
+.B78 a 79
+= Mapping
+.AA
+= Plan HP labor $
+.AF
+= Plan Risk $
+.AE
+= Plan Other Cost $
+---
+DA318
+---
+=DA262+DA206+DA150
