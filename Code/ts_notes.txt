@@ -1,0 +1,15 @@
+unmet demand & availability - definicie pod grafy - Maros def
+
+Nazov Workspacu - Operational Data - k financials - vytvorit dashboard
+
+Total Headcount - farba cisla cervena, oranzova, zelena - Maros def
+pridat vsetky mesiace HC
+
+categorical nie continous - odfiltrovat Januar
+
+
+Stefka
+
+1. page
+kpi certification in chart
+turn the charts page 2. vertically + trend 
